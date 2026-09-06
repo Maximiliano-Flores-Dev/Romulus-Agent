@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/18 sin título_20260906195632.png" alt="Romulus Agent" width="100%">
+  <img src="1000015251.png" alt="Romulus Agent" width="100%">
 </p>
 
 # Romulus Agent ☤
