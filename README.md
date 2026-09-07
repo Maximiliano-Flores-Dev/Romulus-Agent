@@ -18,8 +18,7 @@
 </p>
 
 > [!IMPORTANT]
-> **NOTE:** This is a fork in development of Hermes Agent.
-
+> **NOTE:** This is an unofficial fork in the development of Hermes Agent.
 ---
 
 <div align="center">
