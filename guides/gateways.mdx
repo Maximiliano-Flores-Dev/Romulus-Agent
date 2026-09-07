@@ -1,0 +1,112 @@
+---
+title: "Gateways de mensajería en Romulus: Telegram, Discord y más"
+sidebarTitle: "Gateways"
+description: "Conecta Romulus Agent a Telegram, Discord, Slack, WhatsApp, Signal, Matrix y Teams mediante el asistente de configuración de gateways."
+---
+
+Los gateways permiten hablar con Romulus Agent desde tus canales favoritos, no solo desde la CLI. En esta página verás qué plataformas se soportan y cómo activarlas.
+
+## Plataformas soportadas
+
+<CardGroup cols={2}>
+  <Card title="Telegram" icon="telegram">
+    Bot personal o grupal con soporte de historial y comandos.
+  </Card>
+
+  <Card title="Discord" icon="discord">
+    Integración por bot con soporte de canales y hilos.
+  </Card>
+
+  <Card title="Slack" icon="slack">
+    App de Slack para uso en equipos.
+  </Card>
+
+  <Card title="WhatsApp" icon="whatsapp">
+    Adaptador WhatsApp para conversaciones directas.
+  </Card>
+
+  <Card title="Signal" icon="signal-messenger">
+    Cliente Signal para mensajes cifrados.
+  </Card>
+
+  <Card title="Matrix" icon="cube">
+    Compatibilidad con la red federada Matrix.
+  </Card>
+
+  <Card title="Teams" icon="microsoft">
+    Integración con Microsoft Teams.
+  </Card>
+</CardGroup>
+
+## Habilitar el extra de mensajería
+
+Los gateways se cargan de forma perezosa. Instala el extra correspondiente:
+
+<CodeGroup>
+
+```bash uv
+uv sync --extra messaging
+```
+
+```bash pip
+pip install -e ".[messaging]"
+```
+
+</CodeGroup>
+
+## Ejecutar el asistente
+
+<Steps>
+  <Step title="Lanza el asistente">
+    ```bash
+    hermes gateway setup
+    ```
+  </Step>
+  <Step title="Selecciona la plataforma">
+    Elige el gateway que quieres configurar. Puedes activar varios en secuencia.
+  </Step>
+  <Step title="Introduce los credenciales">
+    El asistente pedirá los tokens y URLs necesarios. Se guardan en `.env`.
+  </Step>
+  <Step title="Verifica la conexión">
+    Ejecuta `hermes doctor` para confirmar que el gateway está operativo.
+  </Step>
+</Steps>
+
+## Ejemplo: Telegram
+
+Para Telegram necesitas un bot creado con `@BotFather` y su token.
+
+<CodeGroup>
+
+```bash .env
+TELEGRAM_BOT_TOKEN=123456:ABC-DEF1234...
+```
+
+</CodeGroup>
+
+Después ejecuta:
+
+```bash
+hermes gateway setup
+```
+
+Selecciona Telegram, pega el token cuando lo pida y confirma. Tu bot quedará escuchando mensajes.
+
+## Roadmap de gateways
+
+<Info>
+  En la Fase 4 del roadmap, los gateways migran de un loop síncrono a arquitectura asíncrona con webhooks y confirmación de entrega. Esto mejora la latencia y la fiabilidad en entornos con múltiples dispositivos.
+</Info>
+
+## Continúa
+
+<CardGroup cols={2}>
+  <Card title="Configuración" icon="sliders" href="/guides/configuration">
+    Ajusta el comportamiento del agente por canal.
+  </Card>
+
+  <Card title="Roadmap" icon="road" href="/development/roadmap">
+    Consulta los planes de rediseño de gateways.
+  </Card>
+</CardGroup>

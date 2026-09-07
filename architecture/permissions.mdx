@@ -1,0 +1,121 @@
+---
+title: "Sistema de permisos por runtime en Romulus Agent"
+sidebarTitle: "Permisos"
+description: "Los cuatro niveles de permiso de Romulus Agent y cómo el runtime los aplica sobre las capacidades del dispositivo, sin confiar en el modelo."
+---
+
+El sistema de permisos de Romulus Agent es una barrera aplicada por el runtime, no por el modelo. En esta página verás los cuatro niveles disponibles, cómo se combinan con las capacidades del dispositivo y qué políticas puedes definir por plataforma.
+
+<Warning>
+  La seguridad de Romulus se basa en un principio simple: nunca confíes exclusivamente en instrucciones del modelo para autorizar acciones sensibles. Los permisos se validan siempre en el runtime, antes de ejecutar cualquier tool.
+</Warning>
+
+## Niveles de permiso
+
+<CardGroup cols={2}>
+  <Card title="READ_ONLY" icon="eye">
+    Solo lectura. El agente puede consultar datos, pero no modificar el estado del sistema.
+  </Card>
+
+  <Card title="USER_APPROVAL" icon="hand">
+    Requiere aprobación explícita del usuario antes de ejecutar la acción.
+  </Card>
+
+  <Card title="PRIVILEGED" icon="key">
+    Operaciones que afectan configuración del usuario, aplicaciones o red local.
+  </Card>
+
+  <Card title="SYSTEM" icon="shield-halved">
+    Acceso a operaciones a nivel de sistema. Reservado para runtimes de escritorio con confianza explícita.
+  </Card>
+</CardGroup>
+
+## Capacidades sujetas a permisos
+
+Cada capacidad del runtime se asocia a uno o más niveles de permiso. Por ejemplo, leer un archivo puede ser `READ_ONLY`, pero borrar un directorio requiere `USER_APPROVAL` o `PRIVILEGED`.
+
+<CardGroup cols={3}>
+  <Card title="filesystem" icon="folder-open">
+    Lectura y escritura de archivos.
+  </Card>
+
+  <Card title="shell" icon="terminal">
+    Ejecución de comandos.
+  </Card>
+
+  <Card title="notifications" icon="bell">
+    Notificaciones nativas.
+  </Card>
+
+  <Card title="camera" icon="camera">
+    Cámara del dispositivo.
+  </Card>
+
+  <Card title="microphone" icon="microphone">
+    Micrófono del dispositivo.
+  </Card>
+
+  <Card title="clipboard" icon="clipboard">
+    Portapapeles.
+  </Card>
+
+  <Card title="sensors" icon="satellite-dish">
+    Sensores.
+  </Card>
+
+  <Card title="networking" icon="wifi">
+    Red local y remota.
+  </Card>
+
+  <Card title="process_management" icon="gears">
+    Gestión de procesos.
+  </Card>
+
+  <Card title="application_control" icon="rocket">
+    Control de aplicaciones.
+  </Card>
+
+  <Card title="browser_automation" icon="browser">
+    Automatización web.
+  </Card>
+</CardGroup>
+
+## Aplicación en el runtime
+
+<Steps>
+  <Step title="El modelo solicita una tool">
+    El agente decide invocar una tool con ciertos argumentos.
+  </Step>
+  <Step title="El runtime evalúa la capacidad">
+    Se identifica la capacidad implicada y el nivel de permiso requerido.
+  </Step>
+  <Step title="Se aplica la política">
+    Se compara con la política configurada para ese dispositivo y usuario.
+  </Step>
+  <Step title="Se solicita aprobación si aplica">
+    Para nivel `USER_APPROVAL`, el runtime pausa la ejecución y pide confirmación.
+  </Step>
+  <Step title="Se ejecuta o se rechaza">
+    Si la política lo permite, la tool corre. En caso contrario, se devuelve un error al agente.
+  </Step>
+</Steps>
+
+## Políticas por dispositivo
+
+Cada dispositivo puede tener una política distinta. Un teléfono personal puede requerir `USER_APPROVAL` para el filesystem, mientras que un desktop de desarrollo puede permitir acceso `PRIVILEGED` por defecto.
+
+<Tip>
+  Diseña las políticas pensando en el peor caso: es preferible pedir una aprobación extra que ejecutar una acción destructiva por error.
+</Tip>
+
+## Siguiente lectura
+
+<CardGroup cols={2}>
+  <Card title="Multidispositivo" icon="mobile-screen" href="/architecture/multi-device">
+    Cómo se descubren y emparejan los dispositivos.
+  </Card>
+
+  <Card title="Roadmap" icon="road" href="/development/roadmap">
+    Fase 6 del roadmap: sistema de permisos completo.
+  </Card>
+</CardGroup>

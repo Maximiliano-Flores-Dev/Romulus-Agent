@@ -1,0 +1,99 @@
+---
+title: "Arquitectura de Romulus Agent: visión general del sistema"
+sidebarTitle: "Visión General"
+description: "Panorama de las capas principales de Romulus Agent: core, estado, tools, gateways, skills, providers y plugins, con sus invariantes."
+---
+
+Romulus Agent se organiza en capas independientes que comunican a través de contratos estrechos. En esta página conocerás cada capa, cómo interactúan entre sí y qué invariantes debes respetar al extender el sistema.
+
+## Capas principales
+
+<CardGroup cols={2}>
+  <Card title="Agent Core" icon="microchip" href="/architecture/agent-core">
+    Loop de razonamiento, gestión de turnos y ciclo de aprendizaje. Cada llamada a la API incluye el toolset completo.
+  </Card>
+
+  <Card title="State" icon="database">
+    SQLite en modo WAL con búsqueda FTS5, compresión de trayectorias y reparación automática de estado.
+  </Card>
+
+  <Card title="Tools" icon="wrench">
+    Herramientas del core, enviadas en cada request. Barrera alta para añadir tools nuevos.
+  </Card>
+
+  <Card title="Gateways" icon="paper-plane">
+    Adaptadores para Telegram, Discord, Slack, WhatsApp, Signal, Matrix y Teams.
+  </Card>
+
+  <Card title="Skills" icon="graduation-cap">
+    Capacidades aprendidas del ciclo de trayectorias. Se refinan con el uso.
+  </Card>
+
+  <Card title="Providers" icon="cloud">
+    Configuración de proveedores de LLM: OpenRouter, OpenAI y compatibles.
+  </Card>
+
+  <Card title="Plugins" icon="puzzle-piece">
+    Extensiones cargadas de forma perezosa. Aíslan el radio de impacto de nuevas dependencias.
+  </Card>
+
+  <Card title="Runtimes" icon="mobile-screen" href="/architecture/multi-device">
+    Adaptadores específicos por plataforma (Android, Linux, Windows, macOS).
+  </Card>
+</CardGroup>
+
+## Flujo de una petición
+
+<Steps>
+  <Step title="Entrada">
+    Un mensaje llega desde la CLI o desde un gateway.
+  </Step>
+  <Step title="Contexto">
+    El core recupera historial y skills relevantes desde el estado persistente.
+  </Step>
+  <Step title="Razonamiento">
+    Se envía el toolset completo al modelo. El agente decide qué tools invocar.
+  </Step>
+  <Step title="Ejecución de tools">
+    El runtime valida permisos y ejecuta las tools solicitadas.
+  </Step>
+  <Step title="Persistencia">
+    La trayectoria se registra para el ciclo de aprendizaje posterior.
+  </Step>
+</Steps>
+
+## Invariantes críticas
+
+<Warning>
+  Estas dos invariantes son la columna vertebral del proyecto. Cualquier extensión debe respetarlas.
+</Warning>
+
+<AccordionGroup>
+  <Accordion title="Invariante 1: el prompt caching debe sobrevivir">
+    Las conversaciones largas reutilizan prefijos cacheados en cada turno. Nunca mutes el system prompt durante una sesión activa, no cambies el toolset a mitad de sesión (usa `--now` si es imprescindible) y asegúrate de que los slash commands sean cache-aware.
+  </Accordion>
+
+  <Accordion title="Invariante 2: el core es un narrow waist">
+    Cada tool del core se envía en cada llamada a la API. Antes de añadir un tool nuevo, considera esta jerarquía: extender uno existente, añadir un comando CLI, crear una skill, exponer un service-gated tool, empaquetar un plugin. Añadir un tool al core es el último recurso.
+  </Accordion>
+</AccordionGroup>
+
+## Continúa explorando
+
+<CardGroup cols={2}>
+  <Card title="Agent Core" icon="microchip" href="/architecture/agent-core">
+    Detalles del loop de razonamiento y del ciclo de aprendizaje.
+  </Card>
+
+  <Card title="Multidispositivo" icon="mobile-screen" href="/architecture/multi-device">
+    Runtimes por plataforma y delegación entre dispositivos.
+  </Card>
+
+  <Card title="Permisos" icon="shield-halved" href="/architecture/permissions">
+    Cómo se aplican los niveles de permiso a las tools.
+  </Card>
+
+  <Card title="Configuración" icon="sliders" href="/guides/configuration">
+    Ajustes del core: compresión, límites de turnos y display.
+  </Card>
+</CardGroup>

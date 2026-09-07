@@ -1,0 +1,161 @@
+---
+title: "Arquitectura multidispositivo y runtimes en Romulus"
+sidebarTitle: "Multidispositivo"
+description: "Cómo Romulus separa el Agent Core del runtime, expone capacidades por dispositivo y delega tareas entre equipos de forma segura."
+---
+
+Romulus Agent está diseñado para operar como un único agente presente en varios dispositivos. En esta página verás cómo se separa el Agent Core del runtime específico de plataforma, cómo se identifica cada dispositivo y cómo se delegan tareas entre equipos.
+
+## Separación Core vs Runtime
+
+<CardGroup cols={2}>
+  <Card title="Agent Core" icon="brain">
+    Lógica independiente de plataforma: razonamiento, estado, tools, skills. Se comparte entre todos los dispositivos.
+  </Card>
+
+  <Card title="Runtime" icon="microchip">
+    Adaptador específico de plataforma. Expone capacidades locales (filesystem, notificaciones, cámara, etc.) al core.
+  </Card>
+</CardGroup>
+
+<Info>
+  Nunca se debe filtrar lógica específica de plataforma dentro del Agent Core. Los adaptadores viven en `romulus/platform/`.
+</Info>
+
+## Runtimes objetivo
+
+<CardGroup cols={2}>
+  <Card title="Android" icon="android">
+    Kotlin y Java sobre JNI. Bajo uso de RAM, batería y permisos mínimos.
+  </Card>
+
+  <Card title="Linux / Escritorio" icon="linux">
+    Bindings en Go o Rust. Acceso completo a shell, procesos y GPU.
+  </Card>
+
+  <Card title="Windows" icon="windows">
+    Runtime preparado tras el MVP de Linux, compartiendo la interfaz común.
+  </Card>
+
+  <Card title="macOS" icon="apple">
+    Objetivo para el runtime de escritorio universal.
+  </Card>
+</CardGroup>
+
+## Capacidades por dispositivo
+
+Cada runtime declara qué capacidades soporta. El agente descubre dinámicamente qué puede hacer en el dispositivo actual antes de proponer un plan.
+
+<CardGroup cols={3}>
+  <Card title="filesystem" icon="folder-open">
+    Lectura y escritura controladas.
+  </Card>
+
+  <Card title="shell" icon="terminal">
+    Ejecución de comandos.
+  </Card>
+
+  <Card title="notifications" icon="bell">
+    Envío de notificaciones nativas.
+  </Card>
+
+  <Card title="camera" icon="camera">
+    Captura de imagen y vídeo.
+  </Card>
+
+  <Card title="microphone" icon="microphone">
+    Captura de audio.
+  </Card>
+
+  <Card title="clipboard" icon="clipboard">
+    Portapapeles del sistema.
+  </Card>
+
+  <Card title="sensors" icon="satellite-dish">
+    Sensores del dispositivo.
+  </Card>
+
+  <Card title="networking" icon="wifi">
+    Acceso a red local y remota.
+  </Card>
+
+  <Card title="process_management" icon="gears">
+    Control de procesos.
+  </Card>
+
+  <Card title="application_control" icon="rocket">
+    Lanzar y controlar apps.
+  </Card>
+
+  <Card title="browser_automation" icon="browser">
+    Automatización de navegador.
+  </Card>
+</CardGroup>
+
+## Identidad de dispositivo
+
+Cada instalación de Romulus expone metadatos que permiten reconocer y distinguir equipos:
+
+| Campo | Descripción |
+| --- | --- |
+| `device_id` | Identificador único de la instalación. |
+| `device_name` | Nombre legible asignado por el usuario. |
+| `platform` | Sistema operativo del dispositivo. |
+| `os_version` | Versión del sistema operativo. |
+| `romulus_version` | Versión del agente. |
+| `capabilities` | Lista de capacidades disponibles. |
+| `connection_status` | Estado actual de conexión. |
+| `runtime_version` | Versión del runtime instalado. |
+
+## Comunicación Romulus-to-Romulus
+
+Los dispositivos se descubren, autentican y emparejan usando un protocolo diseñado para funcionar tanto en red local como remota.
+
+<Steps>
+  <Step title="Descubrimiento">
+    El dispositivo anuncia su identidad en la red o mediante un backend de descubrimiento.
+  </Step>
+  <Step title="Autenticación">
+    Se valida la identidad del par usando claves emparejadas.
+  </Step>
+  <Step title="Emparejamiento">
+    El usuario aprueba la relación entre dispositivos. Se establece una conexión segura.
+  </Step>
+  <Step title="Intercambio">
+    Los dispositivos comparten tareas, resultados y sincronizan estado según sea necesario.
+  </Step>
+</Steps>
+
+## Delegación de tareas
+
+Romulus puede detectar automáticamente qué dispositivo es el mejor para una tarea y transmitirla de forma segura.
+
+```text
+Teléfono
+  ↓
+Romulus Agent
+  ↓
+Task Delegation
+  ↓
+Desktop PC (GPU / recursos locales)
+  ↓
+Resultado
+  ↓
+Teléfono
+```
+
+<Warning>
+  El usuario siempre puede anular la decisión automática de delegación. La seguridad y el control se aplican en el runtime, nunca solo en el modelo.
+</Warning>
+
+## Siguiente lectura
+
+<CardGroup cols={2}>
+  <Card title="Permisos" icon="shield-halved" href="/architecture/permissions">
+    Cómo el runtime aplica los niveles de permiso a cada tool.
+  </Card>
+
+  <Card title="Roadmap" icon="road" href="/development/roadmap">
+    Fases previstas para runtimes móviles y de escritorio.
+  </Card>
+</CardGroup>

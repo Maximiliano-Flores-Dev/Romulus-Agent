@@ -1,0 +1,126 @@
+---
+title: "Guía de contribución al proyecto Romulus Agent"
+sidebarTitle: "Contribuir"
+description: "Cómo hacer fork, configurar el entorno, correr los tests y abrir un pull request en Romulus Agent siguiendo las convenciones del proyecto."
+---
+
+Romulus Agent es un proyecto abierto y las contribuciones son bienvenidas. En esta guía verás cómo preparar tu entorno de desarrollo, ejecutar los tests, respetar el estilo de código y abrir tu primer pull request.
+
+## Preparar el entorno
+
+<Steps>
+  <Step title="Haz fork del repositorio">
+    Ve a [maximiliano-flores-dev/romulus-agent](https://github.com/maximiliano-flores-dev/romulus-agent) y crea tu fork desde la interfaz de GitHub.
+  </Step>
+  <Step title="Clona tu fork">
+    ```bash
+    git clone https://github.com/<tu-usuario>/romulus-agent.git
+    cd romulus-agent
+    ```
+  </Step>
+  <Step title="Instala dependencias de desarrollo">
+    ```bash
+    uv sync --all-extras
+    ```
+
+    Esto instala también los extras opcionales necesarios para correr todos los tests.
+  </Step>
+  <Step title="Crea una rama de trabajo">
+    ```bash
+    git checkout -b feature/mi-cambio
+    ```
+  </Step>
+</Steps>
+
+## Ejecutar los tests
+
+Romulus usa `pytest` para la suite Python y tiene tests JavaScript separados en `tests-js/`.
+
+<CodeGroup>
+
+```bash pytest
+pytest tests/
+```
+
+```bash coverage
+pytest tests/ --cov=.
+```
+
+```bash js
+npm test
+```
+
+</CodeGroup>
+
+<Tip>
+  Ejecuta primero el subconjunto relacionado con tu cambio. La suite completa puede tardar varios minutos.
+</Tip>
+
+## Estilo de código
+
+<CardGroup cols={2}>
+  <Card title="Python" icon="python">
+    Sigue el estilo de `ruff` y las convenciones de `pyproject.toml`.
+  </Card>
+
+  <Card title="JavaScript" icon="js">
+    Usa `prettier` con la configuración incluida (`.prettierrc`).
+  </Card>
+
+  <Card title="Docker" icon="docker">
+    Los Dockerfiles pasan por `hadolint` (ver `.hadolint.yaml`).
+  </Card>
+
+  <Card title="Commits" icon="code-branch">
+    Mensajes claros en imperativo. Referencia el issue relacionado si aplica.
+  </Card>
+</CardGroup>
+
+## Jerarquía de extensión
+
+Antes de añadir código al core, revisa este orden. Añadir un core tool nuevo es el último recurso porque cada tool viaja en cada request al modelo.
+
+1. Extender un tool o skill existente.
+2. Añadir un comando de CLI.
+3. Crear una skill nueva.
+4. Exponer un service-gated tool.
+5. Empaquetar un plugin.
+6. Añadir un core tool (requiere justificación fuerte).
+
+## Abrir el pull request
+
+<Steps>
+  <Step title="Sincroniza con main">
+    ```bash
+    git fetch upstream
+    git rebase upstream/main
+    ```
+  </Step>
+  <Step title="Corre tests y linters">
+    Asegúrate de que la suite pasa localmente.
+  </Step>
+  <Step title="Empuja tu rama">
+    ```bash
+    git push origin feature/mi-cambio
+    ```
+  </Step>
+  <Step title="Abre el PR en GitHub">
+    Describe el problema, la solución, cómo la probaste y cualquier consideración de compatibilidad.
+  </Step>
+</Steps>
+
+<Note>
+  Consulta `CONTRIBUTING.md` (o `CONTRIBUTING.es.md`) del repositorio para detalles adicionales sobre revisión de código y política de branches.
+</Note>
+
+## Continúa
+
+<CardGroup cols={2}>
+  <Card title="Roadmap" icon="road" href="/development/roadmap">
+    Encuentra áreas donde ayudar según la fase actual.
+  </Card>
+
+  <Card title="API Reference" icon="code" href="/development/api-reference">
+    Módulos internos y sus responsabilidades.
+  </Card>
+</CardGroup>

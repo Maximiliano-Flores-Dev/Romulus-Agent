@@ -1,0 +1,105 @@
+---
+title: "Inicio rápido: instala y ejecuta Romulus Agent"
+sidebarTitle: "Inicio rápido"
+description: "Instala Romulus Agent, configura un proveedor de modelo y ejecuta tu primera sesión interactiva en menos de cinco minutos."
+---
+
+Esta guía te lleva desde cero hasta una sesión interactiva de Romulus Agent. Cubre los prerrequisitos mínimos, la instalación básica y el primer arranque de la CLI.
+
+## Prerrequisitos
+
+<CardGroup cols={2}>
+  <Card title="Python 3.11+" icon="python">
+    Romulus utiliza `pyproject.toml` con dependencias modernas y `uv.lock` para builds reproducibles.
+  </Card>
+
+  <Card title="Git" icon="code-branch">
+    Necesario para clonar el repositorio y aplicar actualizaciones.
+  </Card>
+
+  <Card title="Clave de API de un LLM" icon="key">
+    OpenRouter, OpenAI o un endpoint compatible. También puedes usar un modelo local.
+  </Card>
+
+  <Card title="Node.js (opcional)" icon="node-js">
+    Requerido si vas a ejecutar la web UI o herramientas basadas en JavaScript.
+  </Card>
+</CardGroup>
+
+## Instalación en 4 pasos
+
+<Steps>
+  <Step title="Clona el repositorio">
+    <CodeGroup>
+
+    ```bash git
+    git clone https://github.com/maximiliano-flores-dev/romulus-agent.git
+    cd romulus-agent
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Instala las dependencias">
+    Romulus utiliza [uv](https://github.com/astral-sh/uv) como gestor por defecto, pero también funciona con pip.
+
+    <CodeGroup>
+
+    ```bash uv
+    uv sync
+    ```
+
+    ```bash pip
+    pip install -e .
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Ejecuta el asistente de configuración">
+    ```bash
+    hermes setup
+    ```
+
+    El asistente te pedirá el proveedor de modelo, el modelo por defecto, los gateways de mensajería que quieras habilitar y tu nivel de esfuerzo de razonamiento preferido.
+  </Step>
+  <Step title="Inicia la sesión interactiva">
+    ```bash
+    hermes
+    ```
+
+    Se abrirá la CLI interactiva con historial persistente, soporte de slash commands y acceso a las herramientas del core.
+  </Step>
+</Steps>
+
+## Primer mensaje
+
+Escribe cualquier tarea en la CLI. Por ejemplo:
+
+```text
+Analiza el archivo README.md y resume los objetivos del proyecto en cinco puntos.
+```
+
+Romulus ejecutará el ciclo de razonamiento, llamará a las herramientas necesarias y guardará la trayectoria para su ciclo de aprendizaje.
+
+## Próximos pasos
+
+<CardGroup cols={2}>
+  <Card title="Configura un gateway" icon="paper-plane" href="/guides/gateways">
+    Conecta Telegram, Discord u otros canales para hablar con el agente fuera de la CLI.
+  </Card>
+
+  <Card title="Explora la arquitectura" icon="layer-group" href="/architecture/overview">
+    Entiende el flujo de estado, herramientas y skills.
+  </Card>
+
+  <Card title="Personaliza la configuración" icon="sliders" href="/guides/configuration">
+    Ajusta modelo, compresión, límites de turnos y comportamiento del display.
+  </Card>
+
+  <Card title="Añade skills" icon="graduation-cap" href="/guides/skills">
+    Habilita el ciclo de aprendizaje cerrado y crea skills reutilizables.
+  </Card>
+</CardGroup>
+
+<Tip>
+  Si tienes problemas de instalación, ejecuta `hermes doctor` para un diagnóstico automático.
+</Tip>

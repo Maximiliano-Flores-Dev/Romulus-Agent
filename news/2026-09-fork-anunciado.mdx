@@ -1,0 +1,56 @@
+---
+title: "Anunciamos Romulus Agent: fork oficial en desarrollo"
+sidebarTitle: "Fork Anunciado"
+description: "Romulus Agent nace como bifurcación no oficial de Hermes Agent, orientada a una arquitectura multidispositivo con delegación segura de tareas."
+---
+
+Publicado el 6 de septiembre de 2026.
+
+Hoy anunciamos oficialmente **Romulus Agent**, una bifurcación no oficial de Hermes Agent (Nous Research) enfocada en llevar la arquitectura del agente hacia un modelo multidispositivo con delegación de tareas y permisos aplicados por runtime.
+
+<Note>
+  Romulus Agent está en desarrollo activo. El proyecto es abierto y respeta la licencia MIT del upstream.
+</Note>
+
+## Qué se preserva
+
+El fork parte de una base sólida y respeta las invariantes de diseño que hicieron viable a Hermes:
+
+<CardGroup cols={2}>
+  <Card title="Prompt caching" icon="bolt">
+    Las conversaciones largas siguen reutilizando prefijos cacheados. Nada muta el system prompt durante una sesión.
+  </Card>
+
+  <Card title="Narrow waist" icon="microchip">
+    El core sigue siendo estrecho. Cada tool va en cada request, y añadir uno nuevo requiere justificación fuerte.
+  </Card>
+
+  <Card title="Ciclo de aprendizaje" icon="graduation-cap">
+    Trayectorias, evaluación y creación de skills siguen intactos.
+  </Card>
+
+  <Card title="Estado robusto" icon="database">
+    SQLite con WAL y FTS5, compresión y reparación automática.
+  </Card>
+</CardGroup>
+
+## Qué cambia
+
+Romulus reorienta el proyecto hacia un caso de uso nuevo: un único agente coordinado entre varios dispositivos.
+
+- Separación estricta entre Agent Core y runtimes específicos de plataforma.
+- Sistema de permisos aplicado a nivel de runtime, no de modelo.
+- Nueva capa de comunicación Romulus-to-Romulus para delegar tareas entre dispositivos.
+- Web UI como interfaz primaria a medio plazo, en lugar de TUI-first.
+
+## Próximos pasos
+
+<CardGroup cols={2}>
+  <Card title="Consulta el roadmap" icon="road" href="/development/roadmap">
+    Once fases hasta la versión 1.0, con hitos claros.
+  </Card>
+
+  <Card title="Explora la arquitectura" icon="layer-group" href="/architecture/overview">
+    Entiende cómo se estructura el sistema desde el primer día.
+  </Card>
+</CardGroup>

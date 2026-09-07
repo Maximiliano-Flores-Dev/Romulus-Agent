@@ -7,33 +7,84 @@
     "light": "#F3F4F6",
     "dark": "#18181B"
   },
-  "favicon": "/favicon.png",
-  "navigation": [
-    {
-      "group": "Primeros pasos",
-      "pages": [
-        "index",
-        "quickstart",
-        "installation"
+  "favicon": "/images/romulus-agent-logo.png",
+  "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "icon": "github",
+          "href": "https://github.com/maximiliano-flores-dev/romulus-agent"
+        },
+        {
+          "anchor": "Discord",
+          "icon": "discord",
+          "href": "https://discord.gg/RomulusResearch"
+        }
       ]
     },
-    {
-      "group": "Arquitectura",
-      "pages": [
-        "architecture/overview",
-        "architecture/agent-core"
-      ]
-    },
-    {
-      "group": "Desarrollo",
-      "pages": [
-        "development/contributing",
-        "development/api-reference"
-      ]
-    }
-  ],
+    "tabs": [
+      {
+        "tab": "Documentación",
+        "groups": [
+          {
+            "group": "Introducción",
+            "pages": [
+              "index",
+              "quickstart",
+              "installation"
+            ]
+          },
+          {
+            "group": "Arquitectura",
+            "pages": [
+              "architecture/overview",
+              "architecture/agent-core",
+              "architecture/multi-device",
+              "architecture/permissions"
+            ]
+          },
+          {
+            "group": "Guías",
+            "pages": [
+              "guides/configuration",
+              "guides/cli",
+              "guides/gateways",
+              "guides/skills"
+            ]
+          },
+          {
+            "group": "Desarrollo",
+            "pages": [
+              "development/contributing",
+              "development/roadmap",
+              "development/api-reference"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Noticias",
+        "groups": [
+          {
+            "group": "Portal de Noticias",
+            "pages": [
+              "news/index",
+              "news/2026-09-fork-anunciado",
+              "news/2026-09-multi-device-vision",
+              "news/2026-09-roadmap-fase-2"
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "footerSocials": {
     "discord": "https://discord.gg/RomulusResearch",
     "github": "https://github.com/RomulusResearch/romulus-agent"
+  },
+  "logo": {
+    "light": "/images/romulus-agent-logo.png",
+    "dark": "/images/romulus-agent-logo.png"
   }
 }

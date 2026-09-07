@@ -1,0 +1,107 @@
+---
+title: "Roadmap y fases de desarrollo de Romulus Agent"
+sidebarTitle: "Roadmap"
+description: "Fases planificadas del proyecto Romulus Agent, desde el fork inicial de Hermes hasta la delegación de tareas multidispositivo."
+---
+
+El desarrollo de Romulus Agent se organiza en once fases secuenciales. En esta página verás el estado de cada una y los hitos principales del proyecto.
+
+## Fases
+
+| # | Fase | Estado |
+| --- | --- | --- |
+| 1 | Clonar Hermes Agent | ✅ Completado |
+| 2 | Estructura de Proyecto | 🚧 En progreso |
+| 3 | Branding y Assets | ⏳ Pendiente |
+| 4 | Arquitectura Multi-Dispositivo | ⏳ Pendiente |
+| 5 | Sistema de Capacidades | ⏳ Pendiente |
+| 6 | Sistema de Permisos | ⏳ Pendiente |
+| 7 | Runtime Android | ⏳ Pendiente |
+| 8 | Runtime Escritorio (Linux) | ⏳ Pendiente |
+| 9 | Identidad de Dispositivo | ⏳ Pendiente |
+| 10 | Comunicación Multi-Dispositivo | ⏳ Pendiente |
+| 11 | Delegación de Tareas | ⏳ Pendiente |
+
+## Detalle por fase
+
+<AccordionGroup>
+  <Accordion title="Fase 1: Clonar Hermes Agent">
+    Análisis de arquitectura, entrypoints, sistema de tools y ciclo de vida del agente. Identificación de componentes reutilizables y preservación del historial upstream cuando fue práctico.
+  </Accordion>
+
+  <Accordion title="Fase 2: Estructura de Proyecto">
+    Adaptar la estructura para Romulus: separar Agent Core de implementaciones específicas de plataforma. Establecer interfaces comunes para Agents, Models, Tools, Memory, Runtimes, Events y Permissions.
+  </Accordion>
+
+  <Accordion title="Fase 3: Branding y Assets">
+    Crear la identidad visual (logos, iconos, banners). Reemplazar branding de Hermes y preparar assets para futuras apps móviles y de escritorio.
+  </Accordion>
+
+  <Accordion title="Fase 4: Arquitectura Multi-Dispositivo">
+    Crear la interfaz `Runtime` común. Separar la funcionalidad específica de plataforma del Agent Core. Implementar adaptadores independientes por sistema operativo.
+  </Accordion>
+
+  <Accordion title="Fase 5: Sistema de Capacidades">
+    Cada runtime expone qué capacidades soporta (filesystem, shell, notifications, camera, etc.). El agente descubre dinámicamente lo disponible.
+  </Accordion>
+
+  <Accordion title="Fase 6: Sistema de Permisos">
+    Cuatro niveles: `READ_ONLY`, `USER_APPROVAL`, `PRIVILEGED`, `SYSTEM`. Aplicados en el runtime, nunca solo en el modelo. Políticas configurables por dispositivo.
+  </Accordion>
+
+  <Accordion title="Fase 7: Runtime Android">
+    Implementación móvil inicial con acceso controlado a archivos, notificaciones, portapapeles, sensores, cámara, micrófono y tareas en segundo plano. Prioridades: bajo consumo de RAM y batería, permisos mínimos, funcionalidad offline.
+  </Accordion>
+
+  <Accordion title="Fase 8: Runtime Escritorio (Linux)">
+    Ejecución de shell, filesystem, gestión de procesos, portapapeles, notificaciones e integración de modelo local. Preparación de la arquitectura para runtimes posteriores en Windows y macOS.
+  </Accordion>
+
+  <Accordion title="Fase 9: Identidad de Dispositivo">
+    Cada instalación expone metadata (device ID, nombre, plataforma, versión, capacidades, estado de conexión). El agente reconoce y distingue sus dispositivos.
+  </Accordion>
+
+  <Accordion title="Fase 10: Comunicación Multi-Dispositivo">
+    Capa Romulus-to-Romulus: descubrimiento, autenticación, emparejamiento, intercambio de mensajes, transmisión de tareas y resultados. Soporte de red local y remota.
+  </Accordion>
+
+  <Accordion title="Fase 11: Delegación de Tareas">
+    El agente determina qué dispositivo es mejor para cada tarea, la transmite de forma segura y sincroniza el estado. El usuario puede anular las decisiones automáticas.
+  </Accordion>
+</AccordionGroup>
+
+## Hitos principales
+
+<CardGroup cols={2}>
+  <Card title="Hito 1" icon="flag-checkered">
+    Clonar y analizar Hermes Agent. ✅
+  </Card>
+
+  <Card title="Hito 2" icon="flag">
+    Estructura base de Romulus funcional.
+  </Card>
+
+  <Card title="Hito 3" icon="mobile-screen">
+    Runtime Android MVP.
+  </Card>
+
+  <Card title="Hito 4" icon="desktop">
+    Runtime Desktop MVP.
+  </Card>
+
+  <Card title="Hito 5" icon="network-wired">
+    Comunicación multidispositivo MVP.
+  </Card>
+
+  <Card title="Hito 6" icon="right-left">
+    Delegación de tareas funcional.
+  </Card>
+
+  <Card title="Hito 7" icon="star">
+    Versión 1.0 lista para producción.
+  </Card>
+</CardGroup>
+
+<Note>
+  Última actualización del roadmap: septiembre de 2026.
+</Note>

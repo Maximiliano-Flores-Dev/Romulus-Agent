@@ -1,0 +1,117 @@
+---
+title: "Configuración de Romulus Agent: modelo, agente y sesión"
+sidebarTitle: "Configuración"
+description: "Estructura del archivo cli-config.yaml y variables de entorno para configurar el modelo, la compresión, los turnos y la sesión de Romulus."
+---
+
+La configuración de Romulus Agent vive en un archivo YAML y en variables de entorno. En esta página verás cada sección disponible, cómo combinarlas y qué valores por defecto tiene el proyecto.
+
+## Archivo de configuración
+
+Romulus lee `cli-config.yaml` desde el directorio de trabajo. Tienes un ejemplo completo en `cli-config.yaml.example`.
+
+<CodeGroup>
+
+```yaml cli-config.yaml
+model:
+  provider: openrouter
+  base_url: https://openrouter.ai/api/v1
+  default: nous/hermes-3-405b
+
+agent:
+  max_turns: 150
+  reasoning_effort: medium
+
+compression:
+  enabled: true
+  threshold: 0.50
+
+display:
+  tool_progress: all
+
+session_reset:
+  mode: none
+```
+
+</CodeGroup>
+
+## Secciones
+
+<AccordionGroup>
+  <Accordion title="model">
+    Define el proveedor de LLM, la URL base y el modelo por defecto. Cambia `provider` a `openai` u otro compatible según tu clave de API. El campo `default` es el modelo usado si no se especifica otro en la CLI.
+  </Accordion>
+
+  <Accordion title="agent">
+    Controla el comportamiento del loop de razonamiento. `max_turns` limita cuántos turnos puede encadenar el agente antes de detenerse (por defecto 150). `reasoning_effort` acepta `low`, `medium` o `high` y afecta a modelos que soporten esta capacidad.
+  </Accordion>
+
+  <Accordion title="compression">
+    Activa la compresión automática de trayectorias. `threshold: 0.50` significa que se comprime cuando el contexto llega al 50% del límite del modelo. Bajar el umbral reduce coste; subirlo preserva más contexto activo.
+  </Accordion>
+
+  <Accordion title="display">
+    Controla cuánto muestra la CLI del progreso de tools. Los valores válidos son `all`, `errors_only` y `none`.
+  </Accordion>
+
+  <Accordion title="session_reset">
+    Define cómo se comporta el agente al iniciar una sesión nueva. `none` conserva el historial, `on_start` limpia la sesión, `on_idle` la limpia tras inactividad prolongada.
+  </Accordion>
+</AccordionGroup>
+
+## Variables de entorno
+
+Los secretos y las URLs sensibles se cargan desde `.env`. Copia el ejemplo:
+
+```bash
+cp .env.example .env
+```
+
+Variables típicas:
+
+<CodeGroup>
+
+```bash .env
+OPENROUTER_API_KEY=sk-or-...
+OPENAI_API_KEY=sk-...
+TELEGRAM_BOT_TOKEN=123456:ABC...
+DISCORD_BOT_TOKEN=...
+```
+
+</CodeGroup>
+
+<Warning>
+  Nunca comitees `.env`. El archivo está incluido en `.gitignore`.
+</Warning>
+
+## Prioridad de resolución
+
+Romulus resuelve la configuración en este orden (de mayor a menor prioridad):
+
+1. Flags de línea de comandos (`hermes --model ...`).
+2. Variables de entorno.
+3. Archivo `cli-config.yaml` del directorio actual.
+4. Archivo global en `~/.hermes/config.yaml`.
+5. Valores por defecto compilados.
+
+## Verificación
+
+Después de cambiar la configuración, valida con:
+
+```bash
+hermes doctor
+```
+
+El comando reporta problemas de configuración, dependencias faltantes y estado de gateways.
+
+## Siguientes pasos
+
+<CardGroup cols={2}>
+  <Card title="CLI" icon="terminal" href="/guides/cli">
+    Referencia de comandos y slash commands.
+  </Card>
+
+  <Card title="Gateways" icon="paper-plane" href="/guides/gateways">
+    Configura canales de mensajería para tu agente.
+  </Card>
+</CardGroup>

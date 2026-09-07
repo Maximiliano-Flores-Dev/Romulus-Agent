@@ -1,0 +1,86 @@
+---
+title: "Skills y ciclo de aprendizaje autónomo en Romulus"
+sidebarTitle: "Skills"
+description: "Cómo Romulus Agent aprende skills reutilizables desde sus trayectorias, dónde viven en el proyecto y cómo evitar invalidar el prompt cache."
+---
+
+Romulus Agent aprende de cada interacción para crear skills reutilizables que mejoran su eficiencia en tareas repetitivas. En esta guía verás cómo funciona el ciclo de aprendizaje, dónde viven las skills y qué precauciones tomar para no romper el prompt cache.
+
+## El ciclo de aprendizaje
+
+<Steps>
+  <Step title="Task execution">
+    El agente ejecuta una tarea usando el toolset del core. Cada llamada al modelo incluye la lista completa de tools.
+  </Step>
+  <Step title="Trajectory logging">
+    La secuencia de prompts, tool calls y resultados se persiste en SQLite (WAL + FTS5). Esta trayectoria es la materia prima del aprendizaje.
+  </Step>
+  <Step title="Post-task evaluation">
+    Al terminar la tarea, el agente evalúa el resultado, identifica pasos redundantes y detecta patrones.
+  </Step>
+  <Step title="Skill creation">
+    Si el patrón es generalizable, Romulus crea una skill que encapsula el flujo aprendido.
+  </Step>
+  <Step title="Skill refinement">
+    Cada reutilización refina la skill: se acortan pasos, se ajustan parámetros, se mejora la fiabilidad.
+  </Step>
+</Steps>
+
+## Estructura de directorios
+
+| Directorio | Contenido |
+| --- | --- |
+| `skills/` | Skills activas cargadas automáticamente en cada sesión. |
+| `optional-skills/` | Skills disponibles pero desactivadas. Se cargan bajo demanda. |
+
+Puedes mover skills entre directorios para activarlas o desactivarlas sin borrarlas. Los archivos son legibles y versionables con Git.
+
+## Jerarquía de extensión
+
+Antes de crear una skill nueva, sigue la jerarquía del proyecto. Añadir capacidades al core es el último recurso.
+
+<CardGroup cols={2}>
+  <Card title="1. Extender lo existente" icon="pen">
+    Modifica una skill o tool que ya cubra el caso.
+  </Card>
+
+  <Card title="2. CLI command" icon="terminal">
+    Automatiza desde la terminal cuando la lógica no requiere razonamiento.
+  </Card>
+
+  <Card title="3. Skill" icon="graduation-cap">
+    El método preferido para el aprendizaje autónomo.
+  </Card>
+
+  <Card title="4. Service-gated tool" icon="server">
+    Solo si la funcionalidad requiere un servicio externo persistente.
+  </Card>
+
+  <Card title="5. Plugin" icon="puzzle-piece">
+    Para extensiones de terceros con dependencias propias.
+  </Card>
+
+  <Card title="6. Core tool" icon="microchip">
+    Último recurso. La barrera es alta porque cada tool va en cada request.
+  </Card>
+</CardGroup>
+
+## Preservar el prompt cache
+
+<Warning>
+  Las skills nunca deben mutar el system prompt ni cambiar el toolset activo durante una sesión. Cualquier mutación invalida el prompt cache y aumenta latencia y coste en cada turno posterior.
+</Warning>
+
+Si una skill necesita un tool distinto, cierra la sesión, ajusta el toolset con `hermes tools` y vuelve a arrancar con `hermes --now`.
+
+## Continúa
+
+<CardGroup cols={2}>
+  <Card title="Agent Core" icon="microchip" href="/architecture/agent-core">
+    Detalles del loop y del ciclo completo.
+  </Card>
+
+  <Card title="Configuración" icon="sliders" href="/guides/configuration">
+    Ajusta compresión y turnos según tus skills.
+  </Card>
+</CardGroup>

@@ -1,0 +1,172 @@
+---
+title: "Guía de instalación completa de Romulus Agent"
+sidebarTitle: "Instalación"
+description: "Instala Romulus Agent en Linux, macOS o Windows con uv, pip o Docker, y habilita dependencias opcionales como voz o gateways."
+---
+
+Esta guía cubre todas las formas de instalar Romulus Agent, los requisitos por plataforma y las dependencias opcionales que puedes activar según tu caso de uso.
+
+## Requisitos del sistema
+
+<CardGroup cols={2}>
+  <Card title="Python" icon="python">
+    Versión 3.11 o superior. Comprueba tu versión con `python --version`.
+  </Card>
+
+  <Card title="Almacenamiento" icon="hard-drive">
+    Al menos 500 MB para el core; 2 GB si activas modelos locales o extensiones de voz.
+  </Card>
+
+  <Card title="Memoria" icon="memory">
+    Mínimo recomendado: 4 GB de RAM. Para modelos locales, 16 GB o más.
+  </Card>
+
+  <Card title="Red" icon="wifi">
+    Requerida para providers en la nube y para el ciclo de auto-actualización.
+  </Card>
+</CardGroup>
+
+## Instalación con uv (recomendado)
+
+[uv](https://github.com/astral-sh/uv) es el gestor de paquetes por defecto del proyecto.
+
+<Steps>
+  <Step title="Instala uv">
+    <CodeGroup>
+
+    ```bash macOS/Linux
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    ```
+
+    ```powershell Windows
+    powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Clona e instala">
+    ```bash
+    git clone https://github.com/maximiliano-flores-dev/romulus-agent.git
+    cd romulus-agent
+    uv sync
+    ```
+  </Step>
+  <Step title="Verifica la instalación">
+    ```bash
+    hermes --version
+    hermes doctor
+    ```
+  </Step>
+</Steps>
+
+## Instalación con pip
+
+<CodeGroup>
+
+```bash Linux/macOS
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
+
+```bash Windows
+python -m venv .venv
+.venv\Scripts\activate
+pip install -e .
+```
+
+</CodeGroup>
+
+## Instalación con Docker
+
+Romulus incluye un `Dockerfile` y un `docker-compose.yml` listos para producción.
+
+```bash
+docker compose up -d
+docker compose exec romulus hermes
+```
+
+<Tip>
+  Para Windows nativo, existe un `docker-compose.windows.yml` con ajustes específicos.
+</Tip>
+
+## Dependencias opcionales
+
+Romulus usa carga perezosa: instala solo lo que necesites.
+
+<AccordionGroup>
+  <Accordion title="Mensajería (Telegram, Discord, Slack, etc.)">
+    ```bash
+    uv sync --extra messaging
+    ```
+
+    Habilita todos los gateways soportados: Telegram, Discord, Slack, WhatsApp, Signal, Matrix y Teams.
+  </Accordion>
+
+  <Accordion title="Voz (STT con Whisper)">
+    ```bash
+    uv sync --extra voice
+    ```
+
+    Instala `faster-whisper` para transcripción de audio local.
+  </Accordion>
+
+  <Accordion title="TTS premium (ElevenLabs)">
+    ```bash
+    uv sync --extra tts-premium
+    ```
+
+    Habilita síntesis de voz con proveedores externos.
+  </Accordion>
+
+  <Accordion title="Servidores MCP">
+    ```bash
+    uv sync --extra mcp
+    ```
+
+    Añade soporte para el Model Context Protocol y sus servidores auxiliares.
+  </Accordion>
+
+  <Accordion title="Web UI">
+    ```bash
+    uv sync --extra web
+    ```
+
+    Habilita el dashboard web basado en FastAPI.
+  </Accordion>
+</AccordionGroup>
+
+## Configuración de secretos
+
+Copia el archivo de ejemplo y ajusta las variables:
+
+```bash
+cp .env.example .env
+```
+
+Las variables mínimas necesarias son la clave del proveedor de modelo (por ejemplo `OPENROUTER_API_KEY`) y opcionalmente los tokens de gateway.
+
+<Warning>
+  Nunca subas `.env` al repositorio. Está incluido en `.gitignore` por defecto.
+</Warning>
+
+## Actualización
+
+Romulus incluye un comando de auto-actualización:
+
+```bash
+hermes update
+```
+
+Este comando descarga la última versión desde el repositorio y aplica migraciones de estado si son necesarias.
+
+## Desinstalación
+
+```bash
+pip uninstall romulus-agent
+rm -rf ~/.hermes
+```
+
+<Note>
+  Elimina también `~/.hermes` si no quieres conservar el historial de conversaciones ni las skills aprendidas.
+</Note>

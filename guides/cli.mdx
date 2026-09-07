@@ -1,0 +1,111 @@
+---
+title: "Referencia completa de la CLI de Romulus Agent"
+sidebarTitle: "CLI"
+description: "Todos los comandos de la CLI de Romulus Agent: setup, model, tools, gateway, update, doctor y la sesión interactiva."
+---
+
+La CLI es la puerta de entrada principal a Romulus Agent. En esta página encontrarás cada comando disponible, sus opciones más útiles y cuándo usarlos.
+
+## Comandos disponibles
+
+<AccordionGroup>
+  <Accordion title="hermes">
+    Inicia la sesión interactiva con historial persistente, syntax highlighting y soporte de slash commands.
+
+    ```bash
+    hermes
+    ```
+
+    Puedes pasar un modelo específico con `--model` o forzar una recarga de tools con `--now`.
+  </Accordion>
+
+  <Accordion title="hermes setup">
+    Asistente completo de configuración. Pregunta por el proveedor de modelo, gateways de mensajería y preferencias generales.
+
+    ```bash
+    hermes setup
+    ```
+
+    Recomendado para instalaciones nuevas.
+  </Accordion>
+
+  <Accordion title="hermes model">
+    Selecciona o cambia el proveedor y modelo por defecto sin editar el YAML manualmente.
+
+    ```bash
+    hermes model
+    ```
+  </Accordion>
+
+  <Accordion title="hermes tools">
+    Configura qué tools están activos en el toolset del core. Ten en cuenta que cambiar tools invalida el prompt cache de sesiones abiertas.
+
+    ```bash
+    hermes tools
+    ```
+  </Accordion>
+
+  <Accordion title="hermes gateway setup">
+    Asistente específico para configurar gateways de mensajería (Telegram, Discord, Slack y otros).
+
+    ```bash
+    hermes gateway setup
+    ```
+  </Accordion>
+
+  <Accordion title="hermes update">
+    Auto-actualiza Romulus a la última versión desde el repositorio y aplica migraciones de estado si son necesarias.
+
+    ```bash
+    hermes update
+    ```
+  </Accordion>
+
+  <Accordion title="hermes doctor">
+    Diagnóstico automático: valida configuración, dependencias, credenciales y salud del estado.
+
+    ```bash
+    hermes doctor
+    ```
+
+    Ejecútalo cuando algo no funcione como esperabas.
+  </Accordion>
+</AccordionGroup>
+
+## Slash commands
+
+Dentro de la sesión interactiva puedes usar slash commands. Están diseñados para ser cache-aware y no invalidar el prompt cache.
+
+<CardGroup cols={2}>
+  <Card title="/help" icon="circle-question">
+    Lista los comandos disponibles en la sesión.
+  </Card>
+
+  <Card title="/reset" icon="rotate">
+    Reinicia la sesión respetando la política de `session_reset`.
+  </Card>
+
+  <Card title="/model" icon="cube">
+    Cambia el modelo activo para la sesión actual.
+  </Card>
+
+  <Card title="/tools" icon="wrench">
+    Muestra el toolset activo.
+  </Card>
+</CardGroup>
+
+<Tip>
+  Si necesitas cambiar el toolset a mitad de sesión, cierra la sesión y usa `hermes tools` seguido de `hermes --now`. Cambiar tools en caliente invalida el prompt cache.
+</Tip>
+
+## Continúa
+
+<CardGroup cols={2}>
+  <Card title="Configuración" icon="sliders" href="/guides/configuration">
+    Ajusta los valores por defecto del agente.
+  </Card>
+
+  <Card title="Gateways" icon="paper-plane" href="/guides/gateways">
+    Habilita canales de mensajería.
+  </Card>
+</CardGroup>

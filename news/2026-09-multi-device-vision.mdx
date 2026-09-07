@@ -1,0 +1,80 @@
+---
+title: "La visión multidispositivo: un agente en todos tus equipos"
+sidebarTitle: "Visión Multidispositivo"
+description: "Cómo Romulus Agent quiere estar presente en tus dispositivos y delegar tareas al equipo mejor preparado, con permisos y seguridad por runtime."
+---
+
+Publicado el 6 de septiembre de 2026.
+
+La visión de Romulus Agent es simple pero ambiciosa: **un único agente presente en todos tus dispositivos**, capaz de decidir cuál es el mejor equipo para cada tarea y delegar de forma segura. En esta publicación explicamos qué implica y por qué merece un rediseño.
+
+## Runtimes objetivo
+
+<CardGroup cols={2}>
+  <Card title="Android" icon="android">
+    Runtime móvil con bajo consumo de RAM y batería, permisos mínimos y operación offline cuando es posible.
+  </Card>
+
+  <Card title="Linux" icon="linux">
+    Primer runtime de escritorio, con acceso completo a shell, procesos y GPU.
+  </Card>
+
+  <Card title="Windows" icon="windows">
+    Objetivo tras el MVP de Linux, compartiendo la interfaz `Runtime` común.
+  </Card>
+
+  <Card title="macOS" icon="apple">
+    Cierra el conjunto de escritorio para completar el ecosistema.
+  </Card>
+</CardGroup>
+
+## Piezas clave
+
+<Steps>
+  <Step title="Identidad de dispositivo">
+    Cada instalación expone un `device_id`, nombre, plataforma, versión y lista de capacidades. El agente distingue sus equipos.
+  </Step>
+  <Step title="Capacidades por runtime">
+    Cada runtime declara qué puede hacer (`filesystem`, `shell`, `camera`, `microphone`, `browser_automation` y más). El agente descubre lo disponible en tiempo real.
+  </Step>
+  <Step title="Comunicación segura Romulus-to-Romulus">
+    Descubrimiento, autenticación y emparejamiento entre dispositivos, tanto en red local como remota.
+  </Step>
+  <Step title="Delegación de tareas">
+    El agente propone el mejor dispositivo para cada tarea. Un teléfono puede delegar una carga pesada al desktop con GPU.
+  </Step>
+</Steps>
+
+## Un ejemplo
+
+Imagina pedirle a Romulus desde tu teléfono que procese un lote de imágenes con un modelo local. El teléfono no tiene GPU, pero tu desktop sí.
+
+```text
+Teléfono
+  ↓
+Romulus Agent (propone delegar)
+  ↓
+Aprobación del usuario
+  ↓
+Desktop PC (ejecuta con GPU)
+  ↓
+Resultado
+  ↓
+Teléfono
+```
+
+<Tip>
+  La decisión de delegación siempre puede anularse. La transparencia es un requisito de diseño.
+</Tip>
+
+## Continúa
+
+<CardGroup cols={2}>
+  <Card title="Multidispositivo" icon="layer-group" href="/architecture/multi-device">
+    Detalles de la arquitectura por runtime.
+  </Card>
+
+  <Card title="Permisos" icon="shield-halved" href="/architecture/permissions">
+    Cómo se controlan las acciones sensibles.
+  </Card>
+</CardGroup>

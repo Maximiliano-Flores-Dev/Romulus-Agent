@@ -1,0 +1,91 @@
+---
+title: "Referencia interna de módulos Python de Romulus Agent"
+sidebarTitle: "API Reference"
+description: "Módulos principales del core de Romulus Agent y sus responsabilidades conceptuales: agent, state, tools, gateway, skills, providers, plugins."
+---
+
+Esta referencia describe los módulos internos del core de Romulus Agent y su responsabilidad. Es una guía conceptual pensada para colaboradores. La API pública aún no está estabilizada.
+
+<Warning>
+  La API interna se está reorganizando durante la Fase 2 del roadmap. No dependas todavía de rutas de importación concretas para código externo.
+</Warning>
+
+## Módulos principales
+
+<CardGroup cols={2}>
+  <Card title="agent/" icon="brain">
+    Loop de razonamiento, gestión de turnos y coordinación del ciclo de aprendizaje. Punto de entrada del core.
+  </Card>
+
+  <Card title="hermes_state*.py" icon="database">
+    Familia de módulos que implementa el estado persistente sobre SQLite: WAL, FTS5, compresión, reparación, sesiones, mensajes y usage.
+  </Card>
+
+  <Card title="tools/" icon="wrench">
+    Tools del core enviadas en cada llamada a la API. Alta barrera para añadir nuevas.
+  </Card>
+
+  <Card title="gateway/" icon="paper-plane">
+    Adaptadores de mensajería: Telegram, Discord, Slack, WhatsApp, Signal, Matrix, Teams.
+  </Card>
+
+  <Card title="skills/" icon="graduation-cap">
+    Skills activas cargadas por defecto. Alimentadas por el ciclo de aprendizaje.
+  </Card>
+
+  <Card title="providers/" icon="cloud">
+    Configuración de proveedores de LLM (OpenRouter, OpenAI y compatibles).
+  </Card>
+
+  <Card title="plugins/" icon="puzzle-piece">
+    Extensiones opcionales cargadas de forma perezosa para aislar dependencias.
+  </Card>
+
+  <Card title="runtimes (futuro)" icon="mobile-screen">
+    Adaptadores por plataforma. Se materializan en Fase 4 en `romulus/platform/`.
+  </Card>
+</CardGroup>
+
+## Estado (módulos hermes_state\*)
+
+El estado se compone de varios archivos especializados. Cada uno cubre una responsabilidad específica.
+
+| Módulo | Responsabilidad |
+| --- | --- |
+| `hermes_state.py` | Fachada principal del estado. |
+| `hermes_state_schema.py` | Definición del esquema SQLite. |
+| `hermes_state_wal.py` | Gestión del modo Write-Ahead Log. |
+| `hermes_state_fts.py` | Búsqueda full-text con FTS5. |
+| `hermes_state_compression.py` | Compresión de mensajes y trayectorias. |
+| `hermes_state_repair.py` | Reparación automática de bases de datos dañadas. |
+| `hermes_state_sessions.py` | Ciclo de vida de sesiones. |
+| `hermes_state_messages.py` | Persistencia de mensajes. |
+| `hermes_state_usage.py` | Métricas de uso y coste. |
+| `hermes_state_search.py` | Consultas de búsqueda sobre el estado. |
+| `hermes_state_registry.py` | Registro de sesiones y dispositivos. |
+| `hermes_state_gateway.py` | Estado específico de gateways. |
+| `hermes_state_telegram.py` | Estado auxiliar para Telegram. |
+
+## Puntos de entrada
+
+<CardGroup cols={2}>
+  <Card title="run_agent.py" icon="play">
+    Orquesta el loop principal del agente.
+  </Card>
+
+  <Card title="cli.py" icon="terminal">
+    Implementa la CLI y sus subcomandos.
+  </Card>
+
+  <Card title="batch_runner.py" icon="list-check">
+    Ejecuta tareas en batch fuera de la sesión interactiva.
+  </Card>
+
+  <Card title="mcp_serve.py" icon="server">
+    Sirve endpoints compatibles con el Model Context Protocol.
+  </Card>
+</CardGroup>
+
+<Info>
+  Consulta la [guía de contribución](/development/contributing) para preparar el entorno antes de tocar estos módulos.
+</Info>

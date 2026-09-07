@@ -1,0 +1,88 @@
+---
+title: "Agent Core de Romulus: loop de razonamiento y aprendizaje"
+sidebarTitle: "Agent Core"
+description: "Cómo funciona el núcleo del agente Romulus: turnos, compresión de trayectorias, gestión de tools y el ciclo de aprendizaje cerrado."
+---
+
+El Agent Core es el corazón de Romulus Agent. Coordina el loop de razonamiento, gestiona los turnos con el modelo, comprime trayectorias largas y alimenta el ciclo de aprendizaje que genera nuevas skills. En esta página verás cómo procesa un turno y cómo aprende.
+
+## Módulos clave
+
+<CardGroup cols={2}>
+  <Card title="run_agent.py" icon="play">
+    Entrypoint principal. Orquesta el loop de razonamiento y la interacción con el modelo.
+  </Card>
+
+  <Card title="trajectory_compressor.py" icon="file-zipper">
+    Comprime trayectorias cuando el contexto se acerca al umbral configurado (por defecto `0.50`).
+  </Card>
+
+  <Card title="hermes_state.py" icon="database">
+    Capa de persistencia sobre SQLite con soporte de WAL y FTS5.
+  </Card>
+
+  <Card title="toolsets.py" icon="wrench">
+    Define el conjunto de tools activo. Enviado íntegro en cada llamada a la API.
+  </Card>
+</CardGroup>
+
+## Anatomía de un turno
+
+<Steps>
+  <Step title="Recuperar contexto">
+    El core lee la sesión activa desde el estado persistente y arma el prompt con el historial cacheado.
+  </Step>
+  <Step title="Enviar toolset completo">
+    Cada request al proveedor de modelo incluye todos los tools activos. Esto permite que el modelo elija con contexto completo.
+  </Step>
+  <Step title="Decisión del modelo">
+    El modelo devuelve texto, una llamada a tool o ambos. El core interpreta la respuesta.
+  </Step>
+  <Step title="Ejecución con permisos">
+    Si el modelo invoca una tool, el runtime valida los permisos antes de ejecutarla.
+  </Step>
+  <Step title="Persistir y comprimir">
+    El resultado se guarda en la trayectoria. Si el contexto supera el umbral, se comprime automáticamente.
+  </Step>
+  <Step title="Continuar o cerrar">
+    Si el modelo pidió otro turno, el loop repite. El límite por defecto es `max_turns: 150`.
+  </Step>
+</Steps>
+
+## Ciclo de aprendizaje
+
+Romulus cierra el bucle entre ejecución y mejora. Cada trayectoria alimenta la generación de skills reutilizables.
+
+```text
+Task Execution
+    ↓
+Trajectory Logging
+    ↓
+Post-Task Evaluation
+    ↓
+Skill Creation (si se detecta patrón)
+    ↓
+Skill Refinement (mejora en cada reutilización)
+    ↓
+Next Session (skills disponibles)
+```
+
+## Compresión de contexto
+
+Las conversaciones largas pueden superar el límite del modelo. Romulus aplica compresión cuando el contexto alcanza la mitad del máximo disponible, preservando los prefijos cacheados para no invalidar el prompt cache.
+
+<Tip>
+  Ajusta `compression.threshold` en tu configuración para intercambiar coste y contexto disponible.
+</Tip>
+
+## Continúa
+
+<CardGroup cols={2}>
+  <Card title="Skills" icon="graduation-cap" href="/guides/skills">
+    Cómo se generan y reutilizan las skills aprendidas.
+  </Card>
+
+  <Card title="Configuración" icon="sliders" href="/guides/configuration">
+    Parámetros del core: turnos, compresión, esfuerzo de razonamiento.
+  </Card>
+</CardGroup>

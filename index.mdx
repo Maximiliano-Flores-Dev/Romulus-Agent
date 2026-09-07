@@ -1,0 +1,96 @@
+---
+title: "Romulus Agent: agente de IA multidispositivo automejorable"
+sidebarTitle: "Inicio"
+description: "Romulus Agent es un fork de Hermes Agent enfocado en arquitectura multidispositivo, permisos por runtime y delegación de tareas entre dispositivos."
+---
+
+Romulus Agent es un agente de IA automejorable con ciclo de aprendizaje cerrado, memoria persistente y soporte multiplataforma. Este proyecto es una bifurcación no oficial de Hermes Agent, reorientada hacia una arquitectura multidispositivo (Android, Linux, Windows, macOS) con delegación de tareas y permisos aplicados a nivel de runtime.
+
+<Frame>
+  <img
+    src="/images/romulus-agent-logo.png"
+    alt="Logo de Romulus Agent"
+    style={{ maxWidth: "320px", margin: "0 auto" }}
+  />
+</Frame>
+
+<Note>
+  Romulus Agent está en desarrollo activo. Consulta el [roadmap](/development/roadmap) para ver el estado de cada fase.
+</Note>
+
+## Empieza aquí
+
+<CardGroup cols={2}>
+  <Card title="Inicio rápido" icon="rocket" href="/quickstart">
+    Instala Romulus y ejecuta tu primer agente en menos de cinco minutos.
+  </Card>
+
+  <Card title="Instalación" icon="download" href="/installation">
+    Requisitos, dependencias opcionales y guía paso a paso por plataforma.
+  </Card>
+
+  <Card title="Arquitectura" icon="layer-group" href="/architecture/overview">
+    Cómo funciona el core, el sistema de estado y los runtimes multidispositivo.
+  </Card>
+
+  <Card title="Portal de noticias" icon="newspaper" href="/news">
+    Anuncios, hitos y actualizaciones del proyecto Romulus Agent.
+  </Card>
+</CardGroup>
+
+## Qué obtienes
+
+<CardGroup cols={2}>
+  <Card title="Núcleo estrecho" icon="microchip">
+    Un core mínimo con capacidades en los bordes. Toda extensión ocurre vía plugins, skills o herramientas.
+  </Card>
+
+  <Card title="Prompt caching" icon="bolt">
+    Conversaciones largas reutilizan prefijos cacheados. El sistema respeta la invariante en cada turno.
+  </Card>
+
+  <Card title="Multi-gateway" icon="comments">
+    Adaptadores para Telegram, Discord, Slack, WhatsApp, Signal, Matrix y Teams.
+  </Card>
+
+  <Card title="Estado persistente" icon="database">
+    SQLite en modo WAL con búsqueda FTS5, compresión y reparación automática.
+  </Card>
+
+  <Card title="Multidispositivo" icon="mobile-screen">
+    Runtimes independientes por plataforma, con delegación segura de tareas entre dispositivos.
+  </Card>
+
+  <Card title="Sistema de permisos" icon="shield-halved">
+    Niveles `READ_ONLY`, `USER_APPROVAL`, `PRIVILEGED` y `SYSTEM` aplicados por el runtime.
+  </Card>
+</CardGroup>
+
+## Flujo básico
+
+<Steps>
+  <Step title="Instala Romulus">
+    Sigue la [guía de instalación](/installation) para tu sistema operativo.
+  </Step>
+  <Step title="Configura tu proveedor de modelo">
+    Elige un proveedor (OpenRouter, OpenAI, local) desde el asistente `hermes setup`.
+  </Step>
+  <Step title="Ejecuta el agente">
+    Lanza `hermes` para entrar al modo interactivo o conecta un gateway.
+  </Step>
+  <Step title="Extiende con skills">
+    Añade skills opcionales, MCP servers o plugins según necesites.
+  </Step>
+</Steps>
+
+## Comunidad
+
+<CardGroup cols={2}>
+  <Card title="GitHub" icon="github" href="https://github.com/maximiliano-flores-dev/romulus-agent">
+    Código fuente, issues y pull requests.
+  </Card>
+
+  <Card title="Discord" icon="discord" href="https://discord.gg/RomulusResearch">
+    Chat, soporte y discusión en tiempo real.
+  </Card>
+</CardGroup>
